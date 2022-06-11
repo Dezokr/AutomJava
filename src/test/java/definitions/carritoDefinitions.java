@@ -1,13 +1,11 @@
 package definitions;
 
-import io.cucumber.java.es.Cuando;
-import io.cucumber.java.es.Dado;
-import io.cucumber.java.es.E;
-import io.cucumber.java.es.Y;
-import pageobjects.carritoPage;
-import pageobjects.menuPage;
-import pageobjects.pagoPage;
-import pageobjects.tarjetaPage;
+import io.cucumber.java.es.*;
+import pageobjects.*;
+
+import java.io.IOException;
+
+import static support.util.getEvidences;
 
 public class carritoDefinitions {
     /*VARIABLES*/
@@ -15,6 +13,7 @@ public class carritoDefinitions {
     tarjetaPage tarjeta;
     carritoPage carrito;
     pagoPage pago;
+    confirmacionPage confirmacion;
 
 
     public carritoDefinitions() {
@@ -23,6 +22,7 @@ public class carritoDefinitions {
         tarjeta = new tarjetaPage();
         carrito = new carritoPage();
         pago = new pagoPage();
+        confirmacion = new confirmacionPage();
     }
 
     @Dado("que la web esta operativa")
@@ -31,12 +31,14 @@ public class carritoDefinitions {
     }
 
     @Cuando("se genera el número de tarjeta")
-    public void seGeneraElNumeroDeTarjeta() {
+    public void seGeneraElNumeroDeTarjeta() throws IOException {
         menu.clickGenCard();
         menu.activeWindow();
         tarjeta.getCardNumber();
         tarjeta.getCardCVV();
         tarjeta.getCardExp();
+        tarjeta.scrollVertical();
+        getEvidences();
         tarjeta.defaultWindow();
     }
 
@@ -52,15 +54,24 @@ public class carritoDefinitions {
     }
 
     @E("ingresa datos de la tarjeta")
-    public void ingresaDatosDeLaTarjeta() {
+    public void ingresaDatosDeLaTarjeta() throws IOException {
         pago.setCardNum(tarjetaPage.numCard);
         pago.setMonthExp(tarjetaPage.expM);
         pago.setYearExp(tarjetaPage.expA);
         pago.setCardCVV(tarjetaPage.cvv);
+        getEvidences();
     }
 
     @Y("paga el producto")
     public void pagaElProducto() {
+        pago.scrollVertical();
         pago.payProduct();
+    }
+
+    @Entonces("validar mensaje de pago {string}")
+    public void validarMensajeDePago(String msg) throws IOException {
+        confirmacion.getConfirm(msg);
+        getEvidences();
+        confirmacion.getOrder();
     }
 }
