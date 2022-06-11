@@ -24,8 +24,4 @@ public class menuPage extends util {
         wait30.until(ExpectedConditions.elementToBeClickable(genCard_link));
         genCard_link.click();
     }
-
-    public void selectQuantity(){
-        /*wait30.until(ExpectedConditions.elementToBeClickable(()))*/
-    }
 }
