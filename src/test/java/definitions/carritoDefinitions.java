@@ -74,4 +74,22 @@ public class carritoDefinitions {
         getEvidences();
         confirmacion.getOrder();
     }
+
+    @Y("selecciona el mes {string}")
+    public void seleccionaElMes(String mes) {
+        pago.setMonthExp(mes);
+    }
+
+    @Y("selecciona el año {string}")
+    public void seleccionaElAño(String año) {
+        pago.setYearExp(año);
+    }
+
+    @Entonces("validar el mensaje del cuadro de dialogo {string}")
+    public void validarElMensajeDelCuadroDeDialogo(String mensaje) {
+        pagaElProducto();
+        pago.obtenerTextoDialogo(mensaje);
+        pago.aceptarDialogo();
+
+    }
 }
